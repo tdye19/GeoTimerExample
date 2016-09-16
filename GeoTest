@@ -1,0 +1,191 @@
+package GeoCountDownTimer;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class TestGeoCountDownTimer {
+	/*******************************************************************************************************************
+	 * This class is the 
+	 *
+	 ******************************************************************************************************************/	
+
+	@Test
+	public void testConstructor1() {
+		GeoCountDownTimer s = new GeoCountDownTimer (5,10,2015);
+		assertEquals(s.toDateString(),"5/10/2015");
+
+
+	}
+
+	@Test
+	public void testConstructor2() {
+		GeoCountDownTimer s = new GeoCountDownTimer ("5/10/2015");
+		assertTrue(s.toDateString().equals("5/10/2015"));
+
+
+	}
+
+	@Test  
+	public void testConstructor3() {
+		GeoCountDownTimer s = new GeoCountDownTimer ("2/29/2015");
+		assertTrue(s.toDateString().equals("2/29/2015"));
+
+
+	}
+	public void testConstructor4() {
+		GeoCountDownTimer s = new GeoCountDownTimer (5,10,2015);
+		assertEquals(s.toDateString(),"5/10/2015");
+
+
+	}
+	@Test
+	public void testConstructor6() {
+		GeoCountDownTimer s = new GeoCountDownTimer (5,10,2015);
+		assertEquals(s.toDateString(),"5/10/2015");
+
+
+	}
+
+	@Test
+	public void testConstructor7() {
+		GeoCountDownTimer s = new GeoCountDownTimer ("5/10/2015");
+		assertTrue(s.toDateString().equals("5/10/2015"));
+
+
+	}
+	@Test
+	public void testConstructor8() {
+		GeoCountDownTimer s = new GeoCountDownTimer (5,10,2015);
+		assertEquals(s.toDateString(),"5/10/2015");
+
+
+	}
+
+	@Test
+	public void testConstructor9() {
+		GeoCountDownTimer s = new GeoCountDownTimer ("5/10/2015");
+		assertTrue(s.toDateString().equals("5/10/2015"));
+
+
+	}
+	@Test
+	public void testConstructor12() {
+		GeoCountDownTimer s = new GeoCountDownTimer (5,10,2015);
+		assertEquals(s.toDateString(),"5/10/2015");
+
+
+	}
+
+	@Test
+	public void testConstructor11() {
+		GeoCountDownTimer s = new GeoCountDownTimer ("5/10/2015");
+		assertTrue(s.toDateString().equals("5/10/2015"));
+
+
+	}
+	public void testConstructor13() {
+		GeoCountDownTimer s = new GeoCountDownTimer (5,10,2015);
+		assertEquals(s.toDateString(),"5/10/2015");
+
+
+	}
+
+	@Test
+	public void testConstructor14() {
+		GeoCountDownTimer s = new GeoCountDownTimer ("5/10/2015");
+		assertTrue(s.toDateString().equals("5/10/2015"));
+
+
+	}
+
+
+	@Test
+	public void testAddMethod () {
+		GeoCountDownTimer s1 = new GeoCountDownTimer (5,10,2015);
+		s1.inc(365);
+		System.out.println (s1.toDateString().equals("5/9/2016"));
+		assertTrue (s1.toDateString().equals("5/9/2016"));
+
+		s1 = new GeoCountDownTimer (5,10,2016);
+
+		for (int i = 0; i < 365; i++)
+			s1.inc();
+		System.out.println (s1);
+		assertTrue (s1.toDateString().equals("5/10/2017"));
+
+		s1 = new GeoCountDownTimer (5,10,2016);
+
+		System.out.println ("Start:" + s1);
+		for (int i = 0; i < 31665; i++)
+			s1.inc();
+		System.out.println ("Middle:" + s1);
+
+		for (int i = 0; i < 31665; i++)
+			s1.dec();
+		System.out.println ("End: " + s1);
+
+	}
+
+
+	@Test (expected = IllegalArgumentException.class)
+	public void testContuctor10() {
+		new GeoCountDownTimer(2,-3,-3);
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void testContuctor11() {
+		new GeoCountDownTimer("2,-3/-3");
+
+	}
+
+	@Test 
+	public void testEqual () {
+		GeoCountDownTimer s1 = new GeoCountDownTimer (5,9,3000);
+		GeoCountDownTimer s2 = new GeoCountDownTimer (6,1,2015);
+		GeoCountDownTimer s3 = new GeoCountDownTimer (5,5,2015);
+		GeoCountDownTimer s4 = new GeoCountDownTimer (5,9,3000);
+
+		assertFalse(s1.equals(s2));
+		assertTrue (s1.equals(s4));
+
+	}
+	@Test 
+	public void testCompareTo () {
+		GeoCountDownTimer s1 = new GeoCountDownTimer (5,9,2015);
+		GeoCountDownTimer s2 = new GeoCountDownTimer (6,01,2015);
+		GeoCountDownTimer s3 = new GeoCountDownTimer (5,8,2015);
+		GeoCountDownTimer s4 = new GeoCountDownTimer (5,9,2015);
+
+		assertTrue (s2.compareTo(s1) > 0);
+		assertTrue (s3.compareTo(s1) < 0);
+		assertTrue (s1.compareTo(s4) == 0);
+		assertTrue (s4.compareTo(s4)== 0);
+
+	}
+
+	@Test 
+	public void testLoadSave () {
+		GeoCountDownTimer s1 = new GeoCountDownTimer (1,1,2015);
+		GeoCountDownTimer s2 = new GeoCountDownTimer (5,9,2015);
+
+		s1.save("fileName");
+		s1 = new GeoCountDownTimer (1,1,2015);  // resets to zero
+		s1.load("fileName");
+
+	}
+
+	@Test 
+	public void testDaysToGo () {
+		GeoCountDownTimer s1 = new GeoCountDownTimer (2,9,2015);
+		assertTrue (s1.daysToGo("2/1/2015") == 8);
+		assertTrue (s1.daysToGo("2/8/2015") == 1);
+		assertTrue (s1.daysToGo("2/9/2015") == 0);	
+
+		s1 = new GeoCountDownTimer (2,9,5015);
+		System.out.println (s1.daysToGo("2/9/2015"));
+	}
+
+
+}
+
