@@ -1,0 +1,539 @@
+package GeoCountDownTimer;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+/***********************************************************************************************************************
+ * This class is constructing a GeoCountDownTimer, which is a class that takes in a date that you give it and makes it
+ * into a count down clock
+ * @author tdye1
+ * @version September, 2016 
+ *
+ **********************************************************************************************************************/
+public class GeoCountDownTimer {
+	/** The private instances variables*/
+	private  int year, month, day;
+
+	/**Private Static final for an array that holds the days in the month*/
+	private static final int[] DAYS_IN_MONTH = {0,31,28,31,30,31,30,31,31,30,31,30,31};
+
+	/**Private static final that is a String array that holds the name of each month  */
+	private static final String [] MONTHS = {"","January", "February", "March", "April", "May", "June", "July", "August" 
+			,"September", "October", "November", "December"};
+
+	/*************************
+	 * getter method for year
+	 * @return year
+	 *************************/
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	/**************************
+	 * getter method for month 
+	 * @return month
+	 **************************/
+	public int getMonth() {
+		return month;
+	}
+
+	/** set method */
+	public void setMonth(int month) {
+		this.month = month;
+	}
+
+	/**************************
+	 * getter method for month 
+	 * @return month
+	 **************************/
+	public int getDay() {
+		return day;
+	}
+
+
+	public void setDay(int day) {
+		this.day = day;
+	}
+
+	/*******************************************************************************************************************
+	 * A constructor that initializes the instance variables with the provided values
+	 * @throws IllegalArgumentException
+	 * @param month, day, year
+	 ******************************************************************************************************************/
+	public GeoCountDownTimer(int month, int day, int year) {
+		if(!isValidDate(month,day,year))
+			throw new IllegalArgumentException();
+		this.month = month;
+		this.day = day;
+		this.year = year;
+	}
+	/*******************************************************************************************************************
+	 * A constructor that initializes the instance variables with the other GeoCountDownTimer parameter.
+	 * @param other
+	 ******************************************************************************************************************/
+	public GeoCountDownTimer(GeoCountDownTimer other) {
+		this.year = other.year;
+		this.day = other.day;
+		this.month = other.month;
+	}
+	/*******************************************************************************************************************
+	 * A constructor that accepts a string as a parameter with the following format: “11/17/2016” where 11 indicates 
+	 * the month, 17 indicates the day,  and 2016 indicates the year.
+	 * @param geoDate
+	 *@throws IllegalArgumentException
+	 ******************************************************************************************************************/
+	public GeoCountDownTimer(String geoDate) {
+
+		String[] s = geoDate.split("/");
+
+		if (s.length == 3) {
+			month = Integer.parseInt(s[0]);
+			day = Integer.parseInt(s[1]);
+			year = Integer.parseInt(s[2]);
+		} else
+			throw new IllegalArgumentException();
+	}
+	/*******************************************************************************************************************
+	 * A method that returns true if “this” GeoCountDownTimer object is exactly the same as the other object 
+	 * @return false, true
+	 * @param month, day, year
+	 ******************************************************************************************************************/
+	protected static boolean isValidDate(int month, int day, int year){
+		if (day < 1 || day > DAYS_IN_MONTH[month])
+			return false;
+		if (year < 2015)
+			return false;
+
+		else{
+			return true;
+		}
+	}
+
+	/*******************************************************************************************************************
+	 * Default constructor that sets the GeoCountDownTimer to zero.
+	 ******************************************************************************************************************/
+	private GeoCountDownTimer() {
+		year = 0;
+		month = 0;
+		day = 0;
+	}
+	/*******************************************************************************************************************
+	 * A method that returns true if “this” GeoCountDownTimer object is exactly the same as the other object 
+	 * @param other
+	 * @return true, false
+	 ******************************************************************************************************************/
+	public boolean equals(Object other) {
+		if(other == null)
+			return false;
+		if (this == other)
+			return true;
+		if (!(other instanceof GeoCountDownTimer))
+			return false;
+
+		GeoCountDownTimer that = (GeoCountDownTimer) other;
+
+		return (year == that.year && (month == that.month && day == that.day));
+
+	}
+	/*******************************************************************************************************************
+	 * A method that returns 1 if “this” GeoCountDownTimer object is greater than the other GeoCountDownTimer object;
+	 * returns -1 if the “this” GeoCountDownTimer object is less than the other GeoCountDownTimer; returns 0 if the
+	 * “this” GeoCountDownTimer object is equal to the other GeoCountDownTimer object. 
+	 * @param other 
+	 * @return -1,0,1 
+	 ******************************************************************************************************************/
+	public int compareTo(GeoCountDownTimer other) {
+		if (this.year > other.year)
+			return 1;
+		if (this.year < other.year )
+			return -1 ;
+		if (this.month > other.month)
+			return 1;
+		if (this.month < other.month)
+			return -1;
+		if(this.day > other.day)
+			return 1;
+		if(this.day<other.day)
+			return -1;
+
+		else{
+			return 0;
+		}
+	}
+	/*******************************************************************************************************************
+	 * A method that subtracts the number of days from the “this” GeoCountDownTimer object 
+	 * @param
+	 * @throw IllegalArgumentException
+	 ******************************************************************************************************************/
+	public void dec(int input) {
+		if (input < 0)
+		{
+			throw new IllegalArgumentException();
+		}	
+		while(input > 0)
+		{
+			day--;
+			input--;
+		}
+		if(day == DAYS_IN_MONTH[month])
+		{
+			month--;
+			day =1;
+			if(month == 1)
+			{
+				year--;
+				month =1;
+			}
+		}
+	}
+
+	/*******************************************************************************************************************
+	 * A method that subtracts 1 day from the “this” GeoCountDownTimer object.
+	 ******************************************************************************************************************/
+	public void dec() {
+		dec(1);
+
+	}
+	/*******************************************************************************************************************
+	 * A boolean method that checks if every forth year is a leap year and adds one day to February 
+	 * @return true, false
+	 * @param year
+	 ******************************************************************************************************************/
+	public static boolean isLeapYear(int year){
+		if (year % 4 != 0) {
+			return false;
+		} else if (year % 400 == 0) {
+			return true;
+		} else if (year % 100 == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	/*******************************************************************************************************************
+	 * A method that adds the number of days to the “this” GeoCountDownTimer object
+	 * @throws IllegalArgumentException
+	 * @param input
+	 ******************************************************************************************************************/
+	public void inc(int input) {
+		if (input < 0)
+		{
+			throw new IllegalArgumentException();
+		}	
+		while(input > 0)
+		{
+
+
+			if(day <= DAYS_IN_MONTH[month])
+
+				day++;
+			input--;
+			if(day > DAYS_IN_MONTH[month])
+			{
+				month++;
+				day=1;
+
+				if(month > 12)
+				{
+					year++;
+					month=1;
+					if(isLeapYear(year)){
+						day-=1;
+					}
+				}
+			}
+		}
+	}
+	/*******************************************************************************************************************
+	 * A method that adds 1 day from the “this” GeoCountDownTimer object. 
+	 ******************************************************************************************************************/
+	public void inc() {
+		inc(1);
+	}
+
+	/*******************************************************************************************************************
+	 * Method that returns a string that represents a GeoCountDownTimer with the following format:
+	 *   “month day, year”. For example: November 17, 2018
+	 * @return str
+	 * 
+	 ******************************************************************************************************************/
+	public String toString() {
+		String str  = MONTHS[this.month] + " " + this.day + " " + this.year;
+		return str;
+	}
+	/*******************************************************************************************************************
+	 * Method that returns a string that represents a GeoCountDownTimer with the following format:
+	 * “month/day/year”. For example: 2/20/2015
+	 * @return slang
+	 ******************************************************************************************************************/
+	public String toDateString(){
+		String slang = this.month + "/" + this.day + "/" + this.year;
+		return slang;
+	}
+	/*******************************************************************************************************************
+	 * A method that saves the “this” GeoCountDownTimer to a file
+	 * @param fileName
+	 ******************************************************************************************************************/
+	public void save(String fileName){
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new BufferedWriter(new FileWriter("File")));
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		out.println(this.month + "/" + this.day + "/" + this.year );
+		out.close();
+
+
+	}
+	/*******************************************************************************************************************
+	 * A  method that loads the “this” GeoCountDownTimer object from a file
+	 * @param fileName
+	 ******************************************************************************************************************/
+	public void load(String fileName){
+
+
+		try{
+			// open the data file
+			Scanner fileReader = new Scanner(new File("FileName")); 
+
+			// read one String in of data and an int
+			this.year = fileReader.nextInt();
+			this.month = fileReader.nextInt();
+			this.day = fileReader.nextInt();
+			System.out.println (this.month + "/" + this.day + "/" + this.year);
+		}
+
+		// could not find file
+		catch(Exception error) {
+			System.out.println("File not found ");
+		}
+
+	}
+	/*******************************************************************************************************************
+	 * A method that returns the number of days to go from the parameter “fromDate” to the “this” object
+	 * @param fromDate
+	 * @return 0, days_to_go
+	 * @throws IllegalArgumentException
+	 ******************************************************************************************************************/
+	public int daysToGo(String fromDate){
+
+		String[] s = fromDate.split("/");
+		int from_month = Integer.parseInt(s[0]);
+		int from_day = Integer.parseInt(s[1]);
+		int from_year = Integer.parseInt(s[2]);
+		int original_month = this.month;
+		int original_day = this.day;
+		int original_year = this.year;
+		int days_to_go = 0;
+		int difference_in_years = 0;
+		int difference_in_months = 0;
+		int diy_in_months = 0;
+
+		GeoCountDownTimer geo_fromDate = new GeoCountDownTimer(fromDate);
+
+		if (this.compareTo(geo_fromDate) == 0)
+		{
+			return 0;
+		}
+		else if (this.compareTo(geo_fromDate) == -1)
+		{
+			throw new IllegalArgumentException();
+		}
+		else {
+			if (from_year == original_year)
+			{	
+				if (from_month != original_month)
+				{	
+					difference_in_months = original_month - from_month;
+					for (int i = 0; i < difference_in_months; i++)
+					{
+						days_to_go = DAYS_IN_MONTH[from_month];
+					}
+				}
+				if (from_day != original_day)
+				{
+					days_to_go += original_day - from_day;
+				}
+			}
+			else if (from_year != original_year)
+			{
+				difference_in_years = original_year - from_year;
+				diy_in_months = difference_in_years * 12;
+
+				for (int i = 0; i < diy_in_months; i++)
+				{
+					if (i <= 12)
+					{
+						days_to_go += DAYS_IN_MONTH[i];
+					}
+					if (i >= 13)
+					{
+						int j = i % 12;
+						days_to_go += DAYS_IN_MONTH[j];
+					}
+				}
+
+				if (from_month != original_month)
+				{
+					difference_in_months = original_month - from_month;
+
+					for (int i = 0; i < difference_in_months; i++)
+					{
+						days_to_go = DAYS_IN_MONTH[from_month + i];
+					}
+				}
+
+				if (from_day != original_day)
+				{
+					days_to_go += original_day - from_day;
+				}
+			}
+			return days_to_go;
+		}
+		
+	}
+
+
+	
+	/*******************************************************************************************************************
+	 * A Main method that tests all GeoCountDownTimer methods available above and makes sure that all of the methods
+	 * are working properly and can go to extremes and still work
+	 * @param args[]
+	 ******************************************************************************************************************/
+	public static void main (String[] args) {
+		GeoCountDownTimer s = new GeoCountDownTimer("2/28/2018");
+		System.out.println("Date: " + s);
+
+		GeoCountDownTimer s1 = new GeoCountDownTimer(2, 28, 2025);
+		System.out.println("Date: " + s1.toDateString());
+
+		s1.inc(365);
+		System.out.println("Date: " + s1);
+
+		GeoCountDownTimer s2 = new GeoCountDownTimer(2, 27, 2016);
+		for (int i = 0; i < (366 + 365+ 365 + 365); i++)
+			s2.inc();
+		System.out.println("Date: " + s2);
+		GeoCountDownTimer s3 = new GeoCountDownTimer(12,31,2098);
+		s3.inc();
+		System.out.println("Date: " + s3);
+
+		GeoCountDownTimer s4 = new GeoCountDownTimer("5/31/2058");
+		System.out.println("Date: " + s4);
+
+		GeoCountDownTimer s5 = new GeoCountDownTimer(5, 31, 2015);
+		System.out.println("Date: " + s5.toDateString());
+
+		s5.inc(1);
+		System.out.println("Date: " + s5);
+
+		GeoCountDownTimer s6 = new GeoCountDownTimer(4, 28, 2016);
+		for (int i = 0; i < (366 + 365+ 365 + 365); i++)
+			s6.inc();
+		System.out.println("Date: " + s6);
+
+		GeoCountDownTimer z = new GeoCountDownTimer("5/5/2120");
+		System.out.println("Date: " + z);
+
+		GeoCountDownTimer z1 = new GeoCountDownTimer(12,31,3015);
+		System.out.println("Date: " + z1.toDateString());
+
+		z1.inc(98);
+		System.out.println("Date: " + z1);
+
+		GeoCountDownTimer z2 = new GeoCountDownTimer(9,12,3458);
+		for (int i = 0; i < (366 + 365+ 365 + 365); i++)
+			z2.inc();
+		System.out.println("Date: " + z2);
+
+		GeoCountDownTimer z3 = new GeoCountDownTimer(12,31,2098);
+		z3.inc();
+		System.out.println("Date: " + z3);
+
+		GeoCountDownTimer z4 = new GeoCountDownTimer("5/31/2058");
+		System.out.println("Date: " + z4);
+
+		GeoCountDownTimer z5 = new GeoCountDownTimer(5, 31, 2015);
+		System.out.println("Date: " + z5.toDateString());
+
+		s5.inc(963);
+		System.out.println("Date: " + s5);
+
+		GeoCountDownTimer z6 = new GeoCountDownTimer(4, 28, 2016);
+		for (int i = 0; i < (366 + 365+ 365 + 365); i++)
+			z6.inc();
+		System.out.println("Date: " + s6);
+
+		GeoCountDownTimer x = new GeoCountDownTimer("5/8/2098");
+		System.out.println("Date: " + x);
+
+		GeoCountDownTimer x1 = new GeoCountDownTimer(10,21,3051);
+		System.out.println("Date: " + x1.toDateString());
+
+		s1.inc(654);
+		System.out.println("Date: " + x1);
+
+		GeoCountDownTimer x2 = new GeoCountDownTimer(2, 27, 2016);
+		for (int i = 0; i < (46464354); i++)
+			x2.inc();
+		System.out.println("Date: " + x2);
+		GeoCountDownTimer x3 = new GeoCountDownTimer(12,31,2098);
+		x3.inc();
+		System.out.println("Date: " + x3);
+
+		GeoCountDownTimer x4 = new GeoCountDownTimer("5/31/2058");
+		System.out.println("Date: " + x4);
+
+		GeoCountDownTimer x5 = new GeoCountDownTimer(5, 31, 2015);
+		System.out.println("Date: " + x5.toDateString());
+
+		s5.inc(521);
+		System.out.println("Date: " + s5);
+
+		GeoCountDownTimer x6 = new GeoCountDownTimer(8,5,6548);
+		for (int i = 0; i < (6565); i++)
+			s6.inc();
+		System.out.println("Date: " + x6);
+
+		GeoCountDownTimer y = new GeoCountDownTimer("2/28/2018");
+		System.out.println("Date: " + y);
+
+		GeoCountDownTimer y1 = new GeoCountDownTimer(2, 28, 2025);
+		System.out.println("Date: " + y1.toDateString());
+
+		y1.inc(21);
+		System.out.println("Date: " + y1);
+
+		GeoCountDownTimer y2 = new GeoCountDownTimer(2, 27, 2016);
+		for (int i = 0; i < (84); i++)
+			y2.inc();
+		System.out.println("Date: " + y2);
+		GeoCountDownTimer y3 = new GeoCountDownTimer(12,31,2098);
+		y3.inc();
+		System.out.println("Date: " + s3);
+
+		GeoCountDownTimer y4 = new GeoCountDownTimer("5/31/2058");
+		System.out.println("Date: " + y4);
+
+		GeoCountDownTimer y5 = new GeoCountDownTimer(12,4,4568);
+		System.out.println("Date: " + y5.toDateString());
+
+		y5.inc(45);
+		System.out.println("Date: " + y5);
+
+		GeoCountDownTimer y6 = new GeoCountDownTimer(2,2,5466);
+		for (int i = 0; i < (654654); i++)
+			y6.inc();
+		System.out.println("Date: " + y6);
+	}
+}
